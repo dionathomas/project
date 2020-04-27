@@ -1,0 +1,558 @@
+{% extends "main/header.html"%}
+
+{% block content %}
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard with Flexmonster</title>
+  <script src="https://cdn.flexmonster.com/flexmonster.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.flexmonster.com/demo.css">
+  <style>
+/* Charts Style  */
+
+.fm-charts-color-1 {
+fill: #ffa600 !important;
+}
+
+.fm-charts-color-2 {
+fill: #7eae26 !important;
+}
+
+.fm-charts-color-3 {
+fill: #00a45a !important;
+}
+
+.fm-charts-color-4 {
+fill: #df3800 !important;
+}
+
+.fm-charts-color-5 {
+fill: #e95800 !important;
+}
+
+.fm-charts-color-6 {
+fill: #ffa600 !important;
+}</style>
+</head>
+<body>
+
+
+
+<div class="row z-depth-3" style="width: 100%; border-radius: 5px 5px 5px 5px; padding-bottom: 10px;">
+  <div class="teal darken-1" style="width: 100%; border-radius: 5px 5px 0px 0px;">
+  <h3 style="color: azure;padding: 10px;">British petroleum</h3>
+  </div>
+  <div class="col m6" id="pivot-table-one" data-url="{% url 'pivot_data' %}"></div>
+  <div class="col m6" id="pivot-chart-one"></div>
+</div>
+
+
+<div class="row z-depth-3" style="width: 100%; border-radius: 5px 5px 5px 5px; padding-bottom: 10px;">
+  <div class="teal darken-1" style="width: 100%; border-radius: 5px 5px 0px 0px;">
+  <h3 style="color: azure;padding: 10px;">Conoco Phillips</h3>
+  </div>
+  <div class="col m6" id="pivot-table-two" data-url="{% url 'pivot_data' %}"></div>
+  <div class="col m6" id="pivot-chart-two"></div>
+</div>
+
+
+<div class="row z-depth-3" style="width: 100%; border-radius: 5px 5px 5px 5px; padding-bottom: 10px;">
+  <div class="teal darken-1" style="width: 100%; border-radius: 5px 5px 0px 0px;">
+  <h3 style="color: azure;padding: 10px;">Chevron Corporation</h3>
+  </div>
+  <div class="col m6" id="pivot-table-three" data-url="{% url 'pivot_data' %}"></div>
+  <div class="col m6" id="pivot-chart-three"></div>
+</div>
+
+
+<div class="row z-depth-3" style="width: 100%; border-radius: 5px 5px 5px 5px; padding-bottom: 10px;">
+  <div class="teal darken-1" style="width: 100%; border-radius: 5px 5px 0px 0px;">
+  <h3 style="color: azure;padding: 10px;">Royal Dutch Shell</h3>
+  </div>
+  <div class="col m6" id="pivot-table-four" data-url="{% url 'pivot_data' %}"></div>
+  <div class="col m6" id="pivot-chart-four"></div>
+</div>
+
+
+
+
+<script>
+
+function processData(dataset) {
+  var result = []
+  dataset = JSON.parse(dataset);
+  dataset.forEach(item => result.push(item.fields));
+  return result;
+}
+
+$.ajax({
+  url: $("#pivot-table-one").attr("data-url"),
+  dataType: 'json',
+  success: function(data) {
+      new Flexmonster({
+          container: "#pivot-table-one",
+          componentFolder: "https://cdn.flexmonster.com/",
+          width: "50%",
+          height: 500,
+          toolbar: true,
+          report: {
+              dataSource: {
+                  type: "json",
+                  data: processData(data),
+                  mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+              },
+              "slice": {
+                "rows":[{
+                  "uniqueName" : "tweet_sentiment"
+                }],
+                "columns" : [{
+                  "uniqueName": "[Measures]"
+                }],
+                "measures": [{
+                  "uniqueName" : "tweet_sentiment",
+                  "aggregation" : "None"
+                }],
+                "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                    "members": ["customer.[british petroleum]"]
+                },
+                }]
+              }
+          }
+      });
+      new Flexmonster({
+            container: "#pivot-chart-one",
+            componentFolder: "https://cdn.flexmonster.com/",
+            width: "50%",
+            height: 500,
+            //toolbar: true,
+            report: {
+                dataSource: {
+                    type: "json",
+                    data: processData(data),
+                    mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+                },
+                "slice": {
+                    "rows": [{
+                        "uniqueName": "tweet_sentiment"
+                    }],
+                    "columns": [{
+                        "uniqueName": "[Measures]"
+                    }],
+                    "measures": [{
+                        "uniqueName": "tweet_sentiment",
+                        "caption": "sentiment"
+                    }],
+                  "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                  "members": ["customer.[british petroleum]"]
+                },
+                  }],
+                  },
+                "options": {
+                    "viewType": "charts",
+                    "chart": {
+                        "type": "pie"
+                    }
+                }
+            }
+        });
+  }
+});
+
+
+
+
+
+
+
+$.ajax({
+  url: $("#pivot-table-two").attr("data-url"),
+  dataType: 'json',
+  success: function(data) {
+      new Flexmonster({
+          container: "#pivot-table-two",
+          componentFolder: "https://cdn.flexmonster.com/",
+          width: "50%",
+          height: 500,
+          toolbar: true,
+          report: {
+              dataSource: {
+                  type: "json",
+                  data: processData(data),
+                  mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+              },
+              "slice": {
+                "rows":[{
+                  "uniqueName" : "tweet_sentiment"
+                }],
+                "columns" : [{
+                  "uniqueName": "[Measures]"
+                }],
+                "measures": [{
+                  "uniqueName" : "tweet_sentiment",
+                  "aggregation" : "None"
+                }],
+                "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                    "members": ["customer.[conoco phillips]"]
+                },
+                }]
+              }
+          }
+      });
+      new Flexmonster({
+            container: "#pivot-chart-two",
+            componentFolder: "https://cdn.flexmonster.com/",
+            width: "50%",
+            height: 500,
+            //toolbar: true,
+            report: {
+                dataSource: {
+                    type: "json",
+                    data: processData(data),
+                    mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+                },
+                "slice": {
+                    "rows": [{
+                        "uniqueName": "tweet_sentiment"
+                    }],
+                    "columns": [{
+                        "uniqueName": "[Measures]"
+                    }],
+                    "measures": [{
+                        "uniqueName": "tweet_sentiment",
+                        "caption": "sentiment"
+                    }],
+                  "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                  "members": ["customer.[conoco phillips]"]
+                },
+                  }],
+                  },
+                "options": {
+                    "viewType": "charts",
+                    "chart": {
+                        "type": "pie"
+                    }
+                }
+            }
+        });
+  }
+});
+
+
+
+
+$.ajax({
+  url: $("#pivot-table-three").attr("data-url"),
+  dataType: 'json',
+  success: function(data) {
+      new Flexmonster({
+          container: "#pivot-table-three",
+          componentFolder: "https://cdn.flexmonster.com/",
+          width: "50%",
+          height: 500,
+          toolbar: true,
+          report: {
+              dataSource: {
+                  type: "json",
+                  data: processData(data),
+                  mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+              },
+              "slice": {
+                "rows":[{
+                  "uniqueName" : "tweet_sentiment"
+                }],
+                "columns" : [{
+                  "uniqueName": "[Measures]"
+                }],
+                "measures": [{
+                  "uniqueName" : "tweet_sentiment",
+                  "aggregation" : "None"
+                }],
+                "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                    "members": ["customer.[chevron corporation]"]
+                },
+                }]
+              }
+          }
+      });
+      new Flexmonster({
+            container: "#pivot-chart-three",
+            componentFolder: "https://cdn.flexmonster.com/",
+            width: "50%",
+            height: 500,
+            //toolbar: true,
+            report: {
+                dataSource: {
+                    type: "json",
+                    data: processData(data),
+                    mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+                },
+                "slice": {
+                    "rows": [{
+                        "uniqueName": "tweet_sentiment"
+                    }],
+                    "columns": [{
+                        "uniqueName": "[Measures]"
+                    }],
+                    "measures": [{
+                        "uniqueName": "tweet_sentiment",
+                        "caption": "sentiment"
+                    }],
+                  "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                  "members": ["customer.[chevron corporation]"]
+                },
+                  }],
+                  },
+                "options": {
+                    "viewType": "charts",
+                    "chart": {
+                        "type": "pie"
+                    }
+                }
+            }
+        });
+  }
+});
+
+
+
+
+$.ajax({
+  url: $("#pivot-table-four").attr("data-url"),
+  dataType: 'json',
+  success: function(data) {
+      new Flexmonster({
+          container: "#pivot-table-four",
+          componentFolder: "https://cdn.flexmonster.com/",
+          width: "50%",
+          height: 500,
+          toolbar: true,
+          report: {
+              dataSource: {
+                  type: "json",
+                  data: processData(data),
+                  mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+              },
+              "slice": {
+                "rows":[{
+                  "uniqueName" : "tweet_sentiment"
+                }],
+                "columns" : [{
+                  "uniqueName": "[Measures]"
+                }],
+                "measures": [{
+                  "uniqueName" : "tweet_sentiment",
+                  "aggregation" : "None"
+                }],
+                "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                    "members": ["customer.[royal dutch shell]"]
+                },
+                }]
+              }
+          }
+      });
+      new Flexmonster({
+            container: "#pivot-chart-four",
+            componentFolder: "https://cdn.flexmonster.com/",
+            width: "50%",
+            height: 500,
+            //toolbar: true,
+            report: {
+                dataSource: {
+                    type: "json",
+                    data: processData(data),
+                    mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+                },
+                "slice": {
+                    "rows": [{
+                        "uniqueName": "tweet_sentiment"
+                    }],
+                    "columns": [{
+                        "uniqueName": "[Measures]"
+                    }],
+                    "measures": [{
+                        "uniqueName": "tweet_sentiment",
+                        "caption": "sentiment"
+                    }],
+                  "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                  "members": ["customer.[royal dutch shell]"]
+                },
+                  }],
+                  },
+                "options": {
+                    "viewType": "charts",
+                    "chart": {
+                        "type": "pie"
+                    }
+                }
+            }
+        });
+  }
+});
+
+
+
+
+
+</script>
+
+{% endblock %}
