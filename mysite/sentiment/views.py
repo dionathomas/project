@@ -71,7 +71,7 @@ def dashboard(request):
     # pass twitter credentials to tweepy
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_key, access_secret)
-    api = tweepy.API(auth)
+    api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
     for company in tut:
 
@@ -83,7 +83,7 @@ def dashboard(request):
 
             for tweet in Tweets:
                 print(companyname, '<-------------')
-
+                print (tweet)
                 analysis = TextBlob(tweet.text)
                 subjectivity = analysis.sentiment.subjectivity
                 polarity = analysis.sentiment.polarity
@@ -91,7 +91,7 @@ def dashboard(request):
                 if polarity > 0:
                     tweet_sentiment = 'positive'
                 elif polarity == 0:
-                    tweet_sentiment = 'nutral'
+                    tweet_sentiment = 'neutral'
                 else:
                     tweet_sentiment = 'negative'
 

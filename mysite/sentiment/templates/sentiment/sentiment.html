@@ -40,7 +40,7 @@ fill: #ffa600 !important;
 
 <div class="row z-depth-3" style="width: 100%; border-radius: 5px 5px 5px 5px; padding-bottom: 10px;">
   <div class="teal darken-1" style="width: 100%; border-radius: 5px 5px 0px 0px;">
-  <h3 style="color: azure;padding: 10px;">British petroleum</h3>
+  <h3 style="color: azure;padding: 10px;">ANA</h3>
   </div>
   <div class="col m6" id="pivot-table-one" data-url="{% url 'pivot_data' %}"></div>
   <div class="col m6" id="pivot-chart-one"></div>
@@ -49,7 +49,7 @@ fill: #ffa600 !important;
 
 <div class="row z-depth-3" style="width: 100%; border-radius: 5px 5px 5px 5px; padding-bottom: 10px;">
   <div class="teal darken-1" style="width: 100%; border-radius: 5px 5px 0px 0px;">
-  <h3 style="color: azure;padding: 10px;">Conoco Phillips</h3>
+  <h3 style="color: azure;padding: 10px;">JAL</h3>
   </div>
   <div class="col m6" id="pivot-table-two" data-url="{% url 'pivot_data' %}"></div>
   <div class="col m6" id="pivot-chart-two"></div>
@@ -58,7 +58,7 @@ fill: #ffa600 !important;
 
 <div class="row z-depth-3" style="width: 100%; border-radius: 5px 5px 5px 5px; padding-bottom: 10px;">
   <div class="teal darken-1" style="width: 100%; border-radius: 5px 5px 0px 0px;">
-  <h3 style="color: azure;padding: 10px;">Chevron Corporation</h3>
+  <h3 style="color: azure;padding: 10px;">Qantas</h3>
   </div>
   <div class="col m6" id="pivot-table-three" data-url="{% url 'pivot_data' %}"></div>
   <div class="col m6" id="pivot-chart-three"></div>
@@ -67,7 +67,7 @@ fill: #ffa600 !important;
 
 <div class="row z-depth-3" style="width: 100%; border-radius: 5px 5px 5px 5px; padding-bottom: 10px;">
   <div class="teal darken-1" style="width: 100%; border-radius: 5px 5px 0px 0px;">
-  <h3 style="color: azure;padding: 10px;">Royal Dutch Shell</h3>
+  <h3 style="color: azure;padding: 10px;">British Airways</h3>
   </div>
   <div class="col m6" id="pivot-table-four" data-url="{% url 'pivot_data' %}"></div>
   <div class="col m6" id="pivot-chart-four"></div>
@@ -133,7 +133,7 @@ $.ajax({
                 "reportFilters": [{
                   "uniqueName" : "customer_name",
                   "filter": {
-                    "members": ["customer.[british petroleum]"]
+                    "members": ["customer.[ANA]"]
                 },
                 }]
               }
@@ -183,7 +183,7 @@ $.ajax({
                   "reportFilters": [{
                   "uniqueName" : "customer_name",
                   "filter": {
-                  "members": ["customer.[british petroleum]"]
+                  "members": ["customer.[ANA]"]
                 },
                   }],
                   },
@@ -252,7 +252,7 @@ $.ajax({
                 "reportFilters": [{
                   "uniqueName" : "customer_name",
                   "filter": {
-                    "members": ["customer.[conoco phillips]"]
+                    "members": ["customer.[JAL]"]
                 },
                 }]
               }
@@ -302,7 +302,7 @@ $.ajax({
                   "reportFilters": [{
                   "uniqueName" : "customer_name",
                   "filter": {
-                  "members": ["customer.[conoco phillips]"]
+                  "members": ["customer.[JAL]"]
                 },
                   }],
                   },
@@ -368,7 +368,7 @@ $.ajax({
                 "reportFilters": [{
                   "uniqueName" : "customer_name",
                   "filter": {
-                    "members": ["customer.[chevron corporation]"]
+                    "members": ["customer.[Qantas]"]
                 },
                 }]
               }
@@ -418,7 +418,7 @@ $.ajax({
                   "reportFilters": [{
                   "uniqueName" : "customer_name",
                   "filter": {
-                  "members": ["customer.[chevron corporation]"]
+                  "members": ["customer.[Qantas]"]
                 },
                   }],
                   },
@@ -484,7 +484,7 @@ $.ajax({
                 "reportFilters": [{
                   "uniqueName" : "customer_name",
                   "filter": {
-                    "members": ["customer.[royal dutch shell]"]
+                    "members": ["customer.[British Airways]"]
                 },
                 }]
               }
@@ -534,7 +534,7 @@ $.ajax({
                   "reportFilters": [{
                   "uniqueName" : "customer_name",
                   "filter": {
-                  "members": ["customer.[royal dutch shell]"]
+                  "members": ["customer.[British Airways]"]
                 },
                   }],
                   },
@@ -548,6 +548,248 @@ $.ajax({
         });
   }
 });
+
+
+
+
+
+
+
+
+
+$.ajax({
+  url: $("#pivot-table-five").attr("data-url"),
+  dataType: 'json',
+  success: function(data) {
+      new Flexmonster({
+          container: "#pivot-table-five",
+          componentFolder: "https://cdn.flexmonster.com/",
+          width: "50%",
+          height: 500,
+          toolbar: true,
+          report: {
+              dataSource: {
+                  type: "json",
+                  data: processData(data),
+                  mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+              },
+              "slice": {
+                "rows":[{
+                  "uniqueName" : "tweet_sentiment"
+                }],
+                "columns" : [{
+                  "uniqueName": "[Measures]"
+                }],
+                "measures": [{
+                  "uniqueName" : "tweet_sentiment",
+                  "aggregation" : "None"
+                }],
+                "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                    "members": ["customer.[JetBlue]"]
+                },
+                }]
+              }
+          }
+      });
+      new Flexmonster({
+            container: "#pivot-chart-five",
+            componentFolder: "https://cdn.flexmonster.com/",
+            width: "50%",
+            height: 500,
+            //toolbar: true,
+            report: {
+                dataSource: {
+                    type: "json",
+                    data: processData(data),
+                    mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+                },
+                "slice": {
+                    "rows": [{
+                        "uniqueName": "tweet_sentiment"
+                    }],
+                    "columns": [{
+                        "uniqueName": "[Measures]"
+                    }],
+                    "measures": [{
+                        "uniqueName": "tweet_sentiment",
+                        "caption": "sentiment"
+                    }],
+                  "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                  "members": ["customer.[JetBlue]"]
+                },
+                  }],
+                  },
+                "options": {
+                    "viewType": "charts",
+                    "chart": {
+                        "type": "pie"
+                    }
+                }
+            }
+        });
+  }
+});
+
+
+
+
+
+
+
+
+$.ajax({
+  url: $("#pivot-table-six").attr("data-url"),
+  dataType: 'json',
+  success: function(data) {
+      new Flexmonster({
+          container: "#pivot-table-six",
+          componentFolder: "https://cdn.flexmonster.com/",
+          width: "50%",
+          height: 500,
+          toolbar: true,
+          report: {
+              dataSource: {
+                  type: "json",
+                  data: processData(data),
+                  mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+              },
+              "slice": {
+                "rows":[{
+                  "uniqueName" : "tweet_sentiment"
+                }],
+                "columns" : [{
+                  "uniqueName": "[Measures]"
+                }],
+                "measures": [{
+                  "uniqueName" : "tweet_sentiment",
+                  "aggregation" : "None"
+                }],
+                "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                    "members": ["customer.[Qatar Airways]"]
+                },
+                }]
+              }
+          }
+      });
+      new Flexmonster({
+            container: "#pivot-chart-six",
+            componentFolder: "https://cdn.flexmonster.com/",
+            width: "50%",
+            height: 500,
+            //toolbar: true,
+            report: {
+                dataSource: {
+                    type: "json",
+                    data: processData(data),
+                    mapping: {
+                      "customer_name": {
+                          "caption": "customer"
+                      },
+                      "tweet_polarity": {
+                          "caption": "Polarity",
+                          "type": "number"
+                      },
+                      "tweet_subjectivity": {
+                          "caption": "Subjectivity",
+                          "type": "number"
+                      },
+                      "tweet_sentiment": {
+                          "caption": "Sentiment Analysis"
+                      },
+                      "customer_name": {
+                          "caption": "Customer"
+                      }
+                  }
+                },
+                "slice": {
+                    "rows": [{
+                        "uniqueName": "tweet_sentiment"
+                    }],
+                    "columns": [{
+                        "uniqueName": "[Measures]"
+                    }],
+                    "measures": [{
+                        "uniqueName": "tweet_sentiment",
+                        "caption": "sentiment"
+                    }],
+                  "reportFilters": [{
+                  "uniqueName" : "customer_name",
+                  "filter": {
+                  "members": ["customer.[Qatar Airways]"]
+                },
+                  }],
+                  },
+                "options": {
+                    "viewType": "charts",
+                    "chart": {
+                        "type": "pie"
+                    }
+                }
+            }
+        });
+  }
+});
+
 
 
 
